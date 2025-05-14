@@ -20,3 +20,10 @@ Typescript shared modules for usage between front and backend
 - install [bun](https://bun.sh/)
 - install dependencies with `bun install`
 - run the frontend and API together by running `bun dev`
+
+## Roadmap
+- [ ] persistent database for web API
+- [ ] web form for partial signing
+- [ ] API for storage of partial signatures, and automatic aggregation
+- [ ] enable storage and retrieval of ciphertexts to/from IPFS
+- [ ] enable storage and retrieval of ciphertexts and conditions to/from a blockchain
