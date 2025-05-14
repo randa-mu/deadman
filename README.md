@@ -1,5 +1,7 @@
 # deadman 💀
 
+![build](https://github.com/randa-mu/deadman/actions/workflows/build.yml/badge.svg)
+
 A web app for creating a deadman's switch. 
 Input content to be encrypted, choose your committee of keyholders, select the conditions your keyholders should activate the switch, and download their keyshares and ciphertext for distribution.
 
