@@ -1,10 +1,10 @@
 {
-	"name": "bhvr",
-	"version": "0.3.1",
-	"description": "A monorepo template built with Bun, Hono, Vite, and React",
-	"author": "Steve Simkins",
+	"name": "deadman",
+	"version": "0.0.1",
+	"description": "A web application for creating a deadman's switch ",
+	"author": "Randamu",
 	"license": "MIT",
-	"homepage": "https://github.com/stevedylandev/bhvr",
+	"homepage": "https://randa.mu",
 	"workspaces": ["./server", "./client", "./shared"],
 	"scripts": {
 		"dev:client": "cd client && bun run dev",
@@ -17,7 +17,7 @@
 		"build": "bun run build:shared && bun run build:server && bun run build:client",
 		"postinstall": "bun run build:shared && bun run build:server"
 	},
-	"keywords": ["bun", "hono", "react", "vite", "monorepo"],
+	"keywords": ["threshold", "shamir", "deadman", "switch", "privacy"],
 	"devDependencies": {
 		"bun-types": "latest",
 		"concurrently": "^9.1.2"
