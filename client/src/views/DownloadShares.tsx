@@ -13,7 +13,11 @@ type DownloadCiphertextsProps = {
 export const DownloadShares = (props: DownloadCiphertextsProps) => {
     const {id, ciphertext, conditions, shares} = props
     return (
-        <div className="flex flex-row">
+        <div className="flex flex-col space-y-4">
+            <p>Download each of the keyshares below and send them to a person you trust to report honestly
+                if your conditions for decryption are met.<br/>
+                Be careful to give each share to <strong>only</strong> one person. Leaking multiple shares to a single
+                person could allow them to compromise you.</p>
             <div className="flex flex-col space-y-2 flex-1 items-start">
                 {shares.map(share =>
                     <div>

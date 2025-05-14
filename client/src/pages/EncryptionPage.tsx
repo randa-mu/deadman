@@ -1,15 +1,14 @@
 import {useState} from "react"
 import {PublicKey, SecretKeyShare} from "shamir-secret-sharing-bn254"
-import {Accordion, AccordionContent, AccordionTrigger} from "./components/ui/accordion"
-import {AccordionItem} from "@/components/ui/accordion.tsx"
+import {Accordion, AccordionContent, AccordionTrigger, AccordionItem} from "@/components/ui/accordion.tsx"
 import {CreateShares} from "@/views/CreateShares.tsx"
-import {AddContent} from "./views/AddContent"
+import {AddContent} from "@/views/AddContent.tsx"
 import {ChooseConditions} from "@/views/ChooseConditions.tsx"
 import {DownloadShares} from "@/views/DownloadShares.tsx"
 import {UploadCiphertext} from "@/views/UploadCiphertext.tsx"
 
 
-function StepsAccordion() {
+function EncryptionPage() {
     const [accordionIndex, setAccordionIndex] = useState("item-1")
     const [content, setContent] = useState<Uint8Array>()
     const [publicKey, setPublicKey] = useState<PublicKey>()
@@ -101,5 +100,4 @@ function StepsAccordion() {
     )
 }
 
-
-export default StepsAccordion
+export default EncryptionPage

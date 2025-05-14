@@ -1,9 +1,23 @@
-import StepsAccordion from "@/StepsAccordion.tsx"
+import {Route, Routes} from "react-router-dom"
+import EncryptionPage from "@/pages/EncryptionPage.tsx"
+import {DecryptionPage} from "@/pages/DecryptionPage.tsx"
+import {NotFoundPage} from "@/pages/NotFoundPage.tsx"
+import {HomePage} from "@/pages/HomePage.tsx"
+import {BackButtonMixin} from "@/views/BackButtonMixin.tsx"
 
 export const App = () => {
     return (
-        <div className="max-w-4xl mx-auto my-auto">
-            <StepsAccordion />
+        <div className="flex flex-col max-w-4xl h-screen mx-auto my-auto p-4">
+            <h1 className="text-4xl font-bold p-4">deadman 💀</h1>
+            <p>Create a ciphertext that your most trusted confidants can decrypt should you die or be compromised</p>
+            <div className="w-full flex-1 overflow-auto min-h-0 mx-auto my-auto">
+                <Routes>
+                    <Route path="/" Component={HomePage}/>
+                    <Route path="/encrypt" Component={BackButtonMixin(EncryptionPage)}/>
+                    <Route path="/decrypt" Component={BackButtonMixin(DecryptionPage)}/>
+                    <Route path="*" Component={BackButtonMixin(NotFoundPage)}/>
+                </Routes>
+            </div>
         </div>
     )
 }

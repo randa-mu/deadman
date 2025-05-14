@@ -40,7 +40,7 @@ export const ChooseConditions = (props: ChooseConditionsProps) => {
                 <Label htmlFor="r3">Disappearance</Label>
             </div>
             <div>
-                <Button onClick={onSubmit}>Set Conditions</Button>
+                <Button onClick={onSubmit}>Set conditions</Button>
             </div>
         </RadioGroup>
     )

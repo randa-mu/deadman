@@ -35,8 +35,16 @@ export function CreateShares(props: CreateSharesProps) {
     }, [props.onNewShares])
 
     return (
-        <div>
-            <Form {...form}>
+        <div className="space-y-4">
+            <div>
+                <p>Choose how many parties you wish to create shares for.</p>
+                <p>No individual can unliterally betray you and decrypt your content before your compromise conditions
+                    have
+                    been met.</p>
+                <p>Nevertheless, be careful who you choose - if a threshold number of your compatriots betray you, your
+                    secrets will be leaked.</p>
+            </div>
+            <Form {...form} >
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
                     <FormField
                         control={form.control}
@@ -78,7 +86,7 @@ export function CreateShares(props: CreateSharesProps) {
                     />
 
                     <FormMessage/>
-                    <Button type="submit">Submit</Button>
+                    <Button type="submit">Create shares</Button>
                 </form>
             </Form>
         </div>
