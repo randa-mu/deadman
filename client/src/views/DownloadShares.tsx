@@ -2,6 +2,7 @@ import {ReactNode} from "react"
 import {SecretKeyShare} from "shamir-secret-sharing-bn254"
 import {Button} from "@/components/ui/button.tsx"
 import {downloadFile} from "@/lib/utils.ts"
+import {encodeKeysharesFile, KeysharesFile} from "shared"
 
 type DownloadCiphertextsProps = {
     id: string
@@ -20,7 +21,7 @@ export const DownloadShares = (props: DownloadCiphertextsProps) => {
                 person could allow them to compromise you.</p>
             <div className="flex flex-col space-y-2 flex-1 items-start">
                 {shares.map(share =>
-                    <div>
+                    <div key={share.index}>
                         <DownloadButton
                             id={id}
                             ciphertext={ciphertext}
@@ -45,15 +46,7 @@ type DownloadButtonProps = {
 }
 
 function DownloadButton({id, ciphertext, conditions, share, children}: DownloadButtonProps) {
-    const fileContents = {
-        id,
-        share: {
-            index: share.index.toString(16),
-            key: share.share.toString(16)
-        },
-        ciphertext: ciphertext.toHex(),
-        conditions: conditions.toHex(),
-    }
-    const fileJson = JSON.stringify(fileContents)
+    const file: KeysharesFile = {id, ciphertext, conditions, share}
+    const fileJson = encodeKeysharesFile(file)
     return <Button onClick={() => downloadFile(fileJson, `share-${share.index}.json`)}>{children}</Button>
 }

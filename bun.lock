@@ -66,6 +66,10 @@
     "shared": {
       "name": "shared",
       "version": "0.0.1",
+      "dependencies": {
+        "shamir-secret-sharing-bn254": "^0.0.4",
+        "zod": "^3.24.4",
+      },
       "devDependencies": {
         "typescript": "^5.2.2",
       },
