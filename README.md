@@ -24,8 +24,10 @@ Typescript shared modules for usage between front and backend
 - run the frontend and API together by running `bun dev`
 
 ## Roadmap
-- [ ] persistent database for web API
-- [ ] web form for partial signing
+- [x] web form for partial signing
+- [ ] actual encryption of ciphertexts
+- [ ] link the user and ciphertext to avoid cross-decryption
 - [ ] API for storage of partial signatures, and automatic aggregation
+- [ ] persistent database for web API
 - [ ] enable storage and retrieval of ciphertexts to/from IPFS
 - [ ] enable storage and retrieval of ciphertexts and conditions to/from a blockchain
