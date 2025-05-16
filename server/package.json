@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "hono": "^4.7.7",
-    "shared": "workspace:*"
+    "shared": "workspace:*",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@types/bun": "latest"
