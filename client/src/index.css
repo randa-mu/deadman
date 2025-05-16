@@ -1,11 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Funnel+Sans:ital,wght@0,300..800;1,300..800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap');
+@import "@fontsource-variable/funnel-display";
+@import "@fontsource-variable/geist-mono";
+@import "@fontsource-variable/geist";
 @import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-family: "Geist Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   margin: 0 auto;
   padding: 0rem;
   text-align: center;
@@ -80,8 +81,8 @@
 }
 
 @theme inline {
-  --font-mono: "Geist Mono", mono;
-  --font-display: "Funnel Display", sans-serif;
+  --font-mono: "Geist Mono Variable", mono;
+  --font-display: "Funnel Display Variable", sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -155,5 +156,5 @@
 }
 
 h1, h2 {
-  font-family: "Funnel Display", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-family: "Funnel Display Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 }

@@ -38,7 +38,7 @@ export const DecryptionPage = () => {
         setSignature(partialSig.toHex())
     }, [keyshare])
     return (
-        <div className="m-4">
+        <div className="m-4 space-y-4">
             <FilePicker
                 label={"Choose a keyshares file to upload"}
                 file={file}

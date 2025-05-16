@@ -4,6 +4,7 @@ import {DecryptionPage} from "@/pages/DecryptionPage.tsx"
 import {NotFoundPage} from "@/pages/NotFoundPage.tsx"
 import {HomePage} from "@/pages/HomePage.tsx"
 import {BackButtonMixin} from "@/views/BackButtonMixin.tsx"
+import RandamuLogo from "./assets/randamu_logo.svg"
 
 export const App = () => {
     return (
@@ -17,6 +18,10 @@ export const App = () => {
                     <Route path="/decrypt" Component={BackButtonMixin(DecryptionPage)}/>
                     <Route path="*" Component={BackButtonMixin(NotFoundPage)}/>
                 </Routes>
+            </div>
+            <div className="absolute bottom-0 right-0 flex flex-row items-center space-x-2 p-2">
+                <p>Built for your privacy by <a href="https://randa.mu">Randamu</a></p>
+                <img className="h-10 w-10" src={RandamuLogo} alt={"randamu logo"}/>
             </div>
         </div>
     )

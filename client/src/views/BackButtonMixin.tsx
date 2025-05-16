@@ -9,7 +9,7 @@ export function BackButtonMixin(Component: ComponentType): FC<unknown> {
         const location = useLocation()
         const backTarget = location.state?.from?.pathname ?? -1;
         return (
-            <div className="flex flex-col p-2">
+            <div className="flex flex-col m-2">
                 <div className="flex items-start">
                     <Button
                         variant="ghost"

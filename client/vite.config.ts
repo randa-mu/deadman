@@ -1,10 +1,11 @@
 import path from "path"
 import tailwindcss from "@tailwindcss/vite"
-import { defineConfig } from "vite"
+import svgr from "@svgr/rollup"
 import react from "@vitejs/plugin-react"
+import { defineConfig } from "vite"
 
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [react(), tailwindcss(), svgr()],
   resolve: {
     alias: {
       "@client": path.resolve(__dirname, "./src"),
