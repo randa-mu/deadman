@@ -1,14 +1,12 @@
 import {Hono} from "hono"
 import {cors} from "hono/cors"
 import {v4} from "uuid"
-import {GetCiphertextPath, UploadCiphertextPath} from "shared/dist"
-
 const app = new Hono()
 const state = new Map<string, string>()
 
 app.use(cors())
 
-app.get(GetCiphertextPath, async (c) => {
+app.get("/ciphertext/:id", async (c) => {
     const id = c.req.param("id")
     const ciphertext = state.get(id)
     if (!ciphertext) {
@@ -17,7 +15,7 @@ app.get(GetCiphertextPath, async (c) => {
     return c.json({id, ciphertext})
 })
 
-app.post(UploadCiphertextPath, async (c) => {
+app.post("/upload", async (c) => {
     const id = v4()
     const {ciphertext} = await c.req.json()
     if (!ciphertext) {
