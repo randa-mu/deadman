@@ -20,8 +20,7 @@ export const App = () => {
                 </Routes>
             </div>
             <div className="absolute bottom-0 right-0 flex flex-row items-center space-x-2 p-2">
-                <p>Built for your privacy by <a href="https://randa.mu">Randamu</a></p>
-                <img className="h-10 w-10" src={RandamuLogo} alt={"randamu logo"}/>
+                <p>Built for your privacy </p><a href="https://randa.mu"><img className="h-10 w-10" src={RandamuLogo} alt={"randamu logo"}/></a>
             </div>
         </div>
     )
