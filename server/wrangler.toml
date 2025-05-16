@@ -1,0 +1,12 @@
+name = "deadman-api"                    
+main = "dist/index.js"                 
+type = "module"                       
+compatibility_date = "2025-05-16"    
+
+account_id = "be6e44202be5c8af3988fe0a05516358"         
+workers_dev = true                     
+route = "deadman-api.randa.mu/*"
+zone_id = "9f1e7be40a740ee01306c433eeb58b4b"
+
+[build]
+upload = { format = "modules" }  
