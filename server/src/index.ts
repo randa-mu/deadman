@@ -6,6 +6,10 @@ const state = new Map<string, string>()
 
 app.use(cors())
 
+app.get("/health", async (c) => {
+    return c.status(200)
+})
+
 app.get("/ciphertext/:id", async (c) => {
     const id = c.req.param("id")
     const ciphertext = state.get(id)
