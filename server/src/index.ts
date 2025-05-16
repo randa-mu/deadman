@@ -1,6 +1,6 @@
-import {randomUUIDv7} from "bun"
 import {Hono} from "hono"
 import {cors} from "hono/cors"
+import {v4} from "uuid"
 import {GetCiphertextPath, UploadCiphertextPath} from "shared/dist"
 
 const app = new Hono()
@@ -18,7 +18,7 @@ app.get(GetCiphertextPath, async (c) => {
 })
 
 app.post(UploadCiphertextPath, async (c) => {
-    const id = randomUUIDv7()
+    const id = v4()
     const {ciphertext} = await c.req.json()
     if (!ciphertext) {
         return c.status(400)
