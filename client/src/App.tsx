@@ -4,8 +4,8 @@ import {DecryptionPage} from "@/pages/DecryptionPage.tsx"
 import {NotFoundPage} from "@/pages/NotFoundPage.tsx"
 import {HomePage} from "@/pages/HomePage.tsx"
 import {BackButtonMixin} from "@/views/BackButtonMixin.tsx"
-import RandamuLogo from "./assets/randamu_logo.svg"
 import {Button} from "@/components/ui/button.tsx"
+import RandamuLogo from "@/assets/randamu_logo.svg"
 
 export const App = () => {
     return (
