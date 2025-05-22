@@ -1,15 +1,13 @@
 import {Hono} from "hono"
 import {cors} from "hono/cors"
 import {v4} from "uuid"
-import {z, ZodError} from "zod"
+import {ZodError} from "zod"
 import {verifyPartial} from "shamir-secret-sharing-bn254"
-import {type CiphertextInsertion, DeadmanDatabase, type PartialSignatureInsertion} from "@server/db"
-import {UploadCiphertextSchema, UploadPartialSignatureSchema} from "@shared/api"
+import {DeadmanDatabase} from "@server/db"
 import {parseCiphertext, parsePartialSignature} from "@server/mappers"
 
-const app = new Hono()
 const db = new DeadmanDatabase()
-
+const app = new Hono()
 app.use(cors())
 
 app.get("/health", (c) => c.text("OK", 200))

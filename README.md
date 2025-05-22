@@ -23,6 +23,9 @@ Typescript shared modules for usage between front and backend
 - install dependencies with `bun install`
 - run the frontend and API together by running `bun dev`
 
+## Docker
+The server application can be built and run by running `docker build .` at the project root. More details can be found in the [server README](./server/README.md).
+
 ## Roadmap
 - [x] web form for partial signing
 - [ ] actual encryption of ciphertexts
