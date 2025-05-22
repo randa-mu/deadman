@@ -1,5 +1,5 @@
 import {useState} from "react"
-import {PublicKey, SecretKeyShare} from "shamir-secret-sharing-bn254"
+import {createPublicKeyShare, PublicKey, PublicKeyShare, SecretKeyShare} from "shamir-secret-sharing-bn254"
 import {Accordion, AccordionContent, AccordionTrigger, AccordionItem} from "@/components/ui/accordion.tsx"
 import {CreateShares} from "@/views/CreateShares.tsx"
 import {AddContent} from "@/views/AddContent.tsx"
@@ -12,7 +12,9 @@ function EncryptionPage() {
     const [accordionIndex, setAccordionIndex] = useState("item-1")
     const [content, setContent] = useState<Uint8Array>()
     const [publicKey, setPublicKey] = useState<PublicKey>()
+    const [threshold, setThreshold] = useState<number>()
     const [shares, setShares] = useState<Array<SecretKeyShare>>()
+    const [publicKeyShares, setPublicKeyShares] = useState<Array<PublicKeyShare>>()
     const [conditions, setConditions] = useState<Uint8Array>()
     const [encryption, setEncryption] = useState<[string, Uint8Array]>()
 
@@ -21,9 +23,11 @@ function EncryptionPage() {
         setAccordionIndex("item-2")
     }
 
-    const onSharesAdded = (pk: PublicKey, shares: Array<SecretKeyShare>) => {
+    const onSharesAdded = (pk: PublicKey, shares: Array<SecretKeyShare>, threshold: number) => {
         setPublicKey(pk)
         setShares(shares)
+        setPublicKeyShares(shares.map(it => createPublicKeyShare(it)))
+        setThreshold(threshold)
         setAccordionIndex("item-3")
     }
 
@@ -70,12 +74,14 @@ function EncryptionPage() {
             <AccordionItem value="item-4">
                 <AccordionTrigger className="cursor-pointer text-xl">Store your ciphertext</AccordionTrigger>
                 <AccordionContent>
-                    {!shares || !content || !conditions || !publicKey
+                    {!shares || !conditions || !publicKey || !publicKeyShares || !threshold || !content
                         ? <p>You must finish the other steps first</p>
                         : <UploadCiphertext
-                            conditions={conditions}
                             content={content}
+                            threshold={threshold}
+                            conditions={conditions}
                             publicKey={publicKey}
+                            publicKeyShares={publicKeyShares}
                             onUploaded={onCiphertextEncrypted}
                         />
                     }

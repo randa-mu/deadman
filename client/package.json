@@ -28,7 +28,7 @@
     "react-hook-form": "^7.56.3",
     "react-router-dom": "^7.6.0",
     "server": "workspace:*",
-    "shamir-secret-sharing-bn254": "^0.0.4",
+    "shamir-secret-sharing-bn254": "^0.0.5",
     "shared": "workspace:*",
     "tailwind-merge": "^3.3.0",
     "tailwindcss": "^4.1.6",

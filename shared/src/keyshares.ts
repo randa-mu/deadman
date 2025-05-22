@@ -1,7 +1,6 @@
 import type {SecretKeyShare} from "shamir-secret-sharing-bn254"
 import {z} from "zod"
 
-
 export type KeysharesFile = {
     id: string,
     share: SecretKeyShare
@@ -9,7 +8,7 @@ export type KeysharesFile = {
     conditions: Uint8Array,
 }
 
-const hexSchema = z.string().regex(/[0-9A-Fa-f]+/g)
+export const hexSchema = z.string().regex(/[0-9A-Fa-f]+/g)
 const keySharesSchema = z.object({
     id: z.string(),
     share: z.object({
