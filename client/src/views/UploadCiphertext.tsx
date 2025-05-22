@@ -1,8 +1,8 @@
 import {useCallback, useState} from "react"
 import {PublicKey, PublicKeyShare} from "shamir-secret-sharing-bn254"
-import {LoaderPinwheel} from "lucide-react"
 import {Button} from "@/components/ui/button.tsx"
 import {uploadCiphertext} from "shared"
+import {LoadingSpinner} from "@/components/ui/LoadingSpinner.tsx"
 
 type UploadCiphertextProps = {
     content: Uint8Array,
@@ -49,7 +49,7 @@ export const UploadCiphertext = (props: UploadCiphertextProps) => {
             >
                 Encrypt and upload
             </Button>
-            {isLoading && <LoaderPinwheel/>}
+            <LoadingSpinner isLoading={isLoading} />
             {errorMessage && <p>Error: {errorMessage}</p>}
         </div>
     )

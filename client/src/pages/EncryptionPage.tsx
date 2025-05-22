@@ -91,13 +91,14 @@ function EncryptionPage() {
             <AccordionItem value="item-5">
                 <AccordionTrigger className="cursor-pointer text-xl">Download your keyshares</AccordionTrigger>
                 <AccordionContent>
-                    {!shares || !conditions || !encryption
+                    {!shares || !conditions || !encryption || !threshold
                         ? <p>You must finish the other steps first</p>
                         : <DownloadShares
                             conditions={conditions}
                             shares={shares}
                             id={encryption[0]}
                             ciphertext={encryption[1]}
+                            threshold={threshold}
                         />
                     }
                 </AccordionContent>
