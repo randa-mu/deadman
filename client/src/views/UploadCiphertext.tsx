@@ -2,7 +2,7 @@ import {useCallback, useState} from "react"
 import {PublicKey, PublicKeyShare} from "shamir-secret-sharing-bn254"
 import {LoaderPinwheel} from "lucide-react"
 import {Button} from "@/components/ui/button.tsx"
-import type {UploadCiphertextApiResponse} from "shared"
+import {uploadCiphertext} from "shared"
 
 type UploadCiphertextProps = {
     content: Uint8Array,
@@ -33,20 +33,11 @@ export const UploadCiphertext = (props: UploadCiphertextProps) => {
         }
 
         setIsLoading(true)
-        fetch(`${SERVER_URL}/ciphertext`, {
-            method: "POST",
-            body: JSON.stringify(requestBody),
-        })
-            .then(res => {
-                if (res.status !== 201) {
-                    throw new Error(res.statusText)
-                }
-                return res.json() as unknown as UploadCiphertextApiResponse
-            })
+
+        uploadCiphertext(SERVER_URL, requestBody)
             .then(response => onUploaded(response.id, ciphertext))
             .catch(err => setErrorMessage(`error uploading ciphertext: ${err}`))
             .finally(() => setIsLoading(false))
-
 
     }, [conditions, publicKey, publicKeyShares, threshold, onUploaded])
 

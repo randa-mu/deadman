@@ -28,9 +28,8 @@ app.post("/ciphertext", async (c) => {
         return c.text("bad request", 400)
     }
 
-    const id = v4()
     try {
-        db.insertCiphertext(ciphertext)
+        const id = db.insertCiphertext(ciphertext)
         console.log(`stored ciphertext with id ${id}`)
         return c.json({id}, 201)
     } catch (err) {
@@ -38,7 +37,7 @@ app.post("/ciphertext", async (c) => {
     }
 })
 
-app.post("/partial/:id", async (c) => {
+app.post("/partial/:id", async (c, next) => {
     const ciphertextId = c.req.param("id")
     if (!ciphertextId || ciphertextId.trim().length === 0) {
         return c.text("invalid ciphertext ID", 400)
@@ -59,7 +58,29 @@ app.post("/partial/:id", async (c) => {
 
     try {
         db.insertPartialSignature(result)
-        return c.status(204)
+        return c.newResponse(null, 204)
+    } catch (err) {
+        return c.text("internal server error", 500)
+    }
+})
+
+app.get("/partial/:id", async (c) => {
+    const ciphertextId = c.req.param("id")
+
+    if (!ciphertextId || ciphertextId.trim().length === 0) {
+        return c.text("invalid ciphertext ID", 400)
+    }
+    const ciphertext = db.getCiphertext(ciphertextId)
+    if (!ciphertext) {
+        return c.text("no such ciphertext", 404)
+    }
+
+    try {
+        const partials = db.getPartialsForCiphertext(ciphertextId)
+            .filter(it => it.signature != null)
+            .map(it => ({signature: it.signature.toHex(), publicKey: it.publicKey.toHex()}))
+
+        return c.json({partials}, 200)
     } catch (err) {
         return c.text("internal server error", 500)
     }

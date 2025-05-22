@@ -8,7 +8,50 @@ export const UploadCiphertextSchema = z.object({
     publicKeyShares: z.array(hexSchema),
 })
 
+type UploadCiphertextApiResponse = {
+    id: string
+}
+
+export async function uploadCiphertext(serverUrl: string, input: z.infer<typeof UploadCiphertextSchema>): Promise<UploadCiphertextApiResponse> {
+    const response = await fetch(`${serverUrl}/ciphertext`, {
+        method: "POST",
+        body: JSON.stringify(input),
+    })
+    if (response.status !== 201) {
+        throw new Error(response.statusText)
+    }
+    return response.json() as unknown as UploadCiphertextApiResponse
+}
+
 export const UploadPartialSignatureSchema = z.object({
     partialSignature: hexSchema,
     publicKey: hexSchema,
 })
+
+export async function uploadPartialSignature(serverUrl: string, ciphertextId: string, input: z.infer<typeof UploadPartialSignatureSchema>): Promise<void> {
+    const response = await fetch(`${serverUrl}/partial/${ciphertextId}`, {
+        method: "POST",
+        body: JSON.stringify(input),
+    })
+
+    if (response.status !== 204) {
+        throw new Error(response.statusText)
+    }
+}
+
+export type PartialSignatureResponse = {
+    partials: Array<PartialSignature>
+}
+export type PartialSignature = {
+    signature: string,
+    publicKey: string,
+}
+
+export async function fetchPartials(serverUrl: string, ciphertextId: string): Promise<Array<PartialSignature>> {
+    const response = await fetch(`${serverUrl}/partial/${ciphertextId}`)
+    if (response.status !== 200) {
+        throw new Error(response.statusText)
+    }
+    const body = await response.json() as unknown as PartialSignatureResponse
+    return body.partials ?? []
+}

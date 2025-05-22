@@ -1,20 +1,25 @@
 import {useCallback, useEffect, useState} from "react"
+import {createPublicKeyShare, signPartial} from "shamir-secret-sharing-bn254"
 import {FilePicker} from "@/components/ui/FilePicker"
-import {decodeKeysharesFile, KeysharesFile} from "shared"
+import {decodeKeysharesFile, fetchPartials, KeysharesFile, PartialSignature, uploadPartialSignature} from "shared"
 import {RadioGroup, RadioGroupItem} from "@/components/ui/radio-group.tsx"
 import {Label} from "@/components/ui/label.tsx"
 import {Button} from "@/components/ui/button.tsx"
-import {signPartial} from "shamir-secret-sharing-bn254"
+
+const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:3000"
 
 export const DecryptionPage = () => {
     const [file, setFile] = useState<File>()
     const [keyshare, setKeyshare] = useState<KeysharesFile>()
     const [isError, setIsError] = useState<boolean>(false)
-    const [signature, setSignature] = useState<string>()
+    const [isNetworkError, setIsNetworkError] = useState<boolean>(false)
+    const [uploadSuccess, setUploadSuccess] = useState(false)
+    const [partials, setPartials] = useState<Array<PartialSignature>>()
 
     useEffect(() => {
         if (!file) {
             setIsError(false)
+            setUploadSuccess(false)
             return setKeyshare(undefined)
         }
 
@@ -34,9 +39,34 @@ export const DecryptionPage = () => {
         if (!keyshare) {
             return
         }
-        const partialSig = signPartial(keyshare.share, keyshare.conditions)
-        setSignature(partialSig.toHex())
+        const partialSignature = signPartial(keyshare.share, keyshare.conditions)
+        const requestBody = {
+            partialSignature: partialSignature.toHex(),
+            publicKey: createPublicKeyShare(keyshare.share).pk.toHex()
+        }
+        uploadPartialSignature(SERVER_URL, keyshare.id, requestBody)
+            .then(() => setUploadSuccess(true))
+            .catch(setIsNetworkError)
+
     }, [keyshare])
+
+    useEffect(() => {
+        if (!keyshare) {
+            return
+        }
+
+        const id = setInterval(() => {
+            fetchPartials(SERVER_URL, keyshare.id)
+                .then(partials => {
+                    console.log(partials)
+                    setPartials(partials)
+                })
+                .catch(setIsNetworkError)
+        }, 5000)
+
+        return () => clearInterval(id)
+    }, [keyshare])
+
     return (
         <div className="m-4 space-y-4">
             <FilePicker
@@ -46,8 +76,18 @@ export const DecryptionPage = () => {
             />
 
             {isError && <p className="font-destructive">Invalid keyshare file</p>}
+            {isNetworkError && <p className="font-destructive">There was an error uploading your partial signature</p>}
             {!!keyshare && <ConditionEvaluation share={keyshare} onConditionMet={onConditionsMet}/>}
-            {!!signature && <p>partial signature created: <pre>0x{signature}</pre></p>}
+            {uploadSuccess && <p>partial signature uploaded successfully</p>}
+            <div className="grid grid-cols-2">
+                {!partials || partials.length === 0 && <div>No partials yet</div>}
+                {!!partials && partials.map((partial: PartialSignature, index: number) =>
+                    <div>
+                        <div key={`pk${index}`}>{partial.publicKey}</div>
+                        <div key={`sig${index}`}>{partial.signature}</div>
+                    </div>
+                )}
+            </div>
         </div>
     )
 }
