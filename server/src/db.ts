@@ -25,6 +25,7 @@ export class DeadmanDatabase {
                 ciphertext_id TEXT        NOT NULL REFERENCES ciphertexts (id) ON DELETE CASCADE,
                 public_key    BLOB UNIQUE NOT NULL,
                 signature     BLOB,
+                share_index   INTEGER     NOT NULL,
                 PRIMARY KEY (ciphertext_id, public_key)
             )
         `)
@@ -43,10 +44,11 @@ export class DeadmanDatabase {
                 $4: insertion.ciphertext
             })
 
-            insertion.publicKeyShares.forEach((publicKey) => {
-                this.db.query("INSERT INTO partial_signatures(ciphertext_id, public_key) VALUES ($1, $2)").run({
+            insertion.publicKeyShares.forEach((publicKey, i) => {
+                this.db.query("INSERT INTO partial_signatures(ciphertext_id, public_key, share_index) VALUES ($1, $2, $3)").run({
                     $1: ciphertextId,
                     $2: publicKey,
+                    $3: BigInt(i + 1)
                 })
             })
         })
@@ -90,6 +92,7 @@ export class DeadmanDatabase {
         const out = []
         for (const result of results) {
             out.push({
+                shareIndex: result.share_index,
                 signature: result.signature,
                 ciphertextId: result.ciphertext_id,
                 publicKey: result.public_key,
@@ -114,6 +117,7 @@ export interface CiphertextEntry {
 }
 
 export interface PartialSignatureInsertion {
+    shareIndex: bigint
     ciphertextId: string
     publicKey: Uint8Array
     signature: Uint8Array

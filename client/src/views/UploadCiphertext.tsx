@@ -3,6 +3,7 @@ import {PublicKey, PublicKeyShare} from "shamir-secret-sharing-bn254"
 import {Button} from "@/components/ui/button.tsx"
 import {uploadCiphertext} from "shared"
 import {LoadingSpinner} from "@/components/ui/LoadingSpinner.tsx"
+import {IBE, serializeCiphertext} from "identity-based-encryption-bn254"
 
 type UploadCiphertextProps = {
     content: Uint8Array,
@@ -14,20 +15,22 @@ type UploadCiphertextProps = {
 }
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:3000"
+const ibe = new IBE()
 
 export const UploadCiphertext = (props: UploadCiphertextProps) => {
-    const {conditions, publicKey, publicKeyShares, threshold, onUploaded} = props
+    const {content, conditions, publicKey, publicKeyShares, threshold, onUploaded} = props
     const [isLoading, setIsLoading] = useState(false)
     const [errorMessage, setErrorMessage] = useState("")
 
     const encryptAndUpload = useCallback(() => {
         setErrorMessage("")
-        // fake encryption for now
-        const ciphertext = new TextEncoder().encode("deadbeefdeadbeefdeadbeef")
+        const identity = ibe.createIdentity(conditions)
+        const ciphertext = ibe.encrypt(content, identity, IBE.parsePublicKey(publicKey.pk))
+        const ciphertextBytes = serializeCiphertext(ciphertext)
         const requestBody = {
             threshold,
             conditions: conditions.toHex(),
-            ciphertext: ciphertext.toHex(),
+            ciphertext: ciphertextBytes.toHex(),
             publicKey: publicKey.pk.toHex(),
             publicKeyShares: publicKeyShares.map(it => it.pk.toHex()),
         }
@@ -35,11 +38,11 @@ export const UploadCiphertext = (props: UploadCiphertextProps) => {
         setIsLoading(true)
 
         uploadCiphertext(SERVER_URL, requestBody)
-            .then(response => onUploaded(response.id, ciphertext))
+            .then(response => onUploaded(response.id, ciphertextBytes))
             .catch(err => setErrorMessage(`error uploading ciphertext: ${err}`))
             .finally(() => setIsLoading(false))
 
-    }, [conditions, publicKey, publicKeyShares, threshold, onUploaded])
+    }, [content, conditions, publicKey, publicKeyShares, threshold, onUploaded])
 
     return (
         <div className="space-y-2">

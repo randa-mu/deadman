@@ -1,12 +1,13 @@
 import {Hono} from "hono"
 import {cors} from "hono/cors"
-import {v4} from "uuid"
 import {ZodError} from "zod"
 import {verifyPartial} from "shamir-secret-sharing-bn254"
 import {DeadmanDatabase} from "@server/db"
 import {parseCiphertext, parsePartialSignature} from "@server/mappers"
+import {IBE} from "identity-based-encryption-bn254"
 
 const db = new DeadmanDatabase()
+const ibe = new IBE()
 const app = new Hono()
 app.use(cors())
 
@@ -52,7 +53,9 @@ app.post("/partial/:id", async (c, next) => {
         console.error(result)
         return c.text("bad request", 400)
     }
-    if (!verifyPartial(result.publicKey, ciphertext.conditions, result.signature)) {
+
+    const publicKey = IBE.parsePublicKey(result.publicKey)
+    if (!ibe.isValidDecryptionKey(publicKey, { bytes: result.signature }, ciphertext.conditions)) {
         return c.text("invalid partial signature", 400)
     }
 
@@ -78,7 +81,11 @@ app.get("/partial/:id", async (c) => {
     try {
         const partials = db.getPartialsForCiphertext(ciphertextId)
             .filter(it => it.signature != null)
-            .map(it => ({signature: it.signature.toHex(), publicKey: it.publicKey.toHex()}))
+            .map(it => ({
+                shareIndex: Number(it.shareIndex),
+                signature: it.signature.toHex(),
+                publicKey: it.publicKey.toHex()
+            }))
 
         return c.json({partials}, 200)
     } catch (err) {

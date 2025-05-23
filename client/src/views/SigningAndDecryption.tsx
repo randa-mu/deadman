@@ -1,15 +1,19 @@
 import {useCallback, useEffect, useState} from "react"
 import {fetchPartials, KeysharesFile, PartialSignature, uploadPartialSignature} from "shared"
-import {createPublicKeyShare, signPartial} from "shamir-secret-sharing-bn254"
+import {createPublicKeyShare} from "shamir-secret-sharing-bn254"
 import {ConditionEvaluation} from "@/views/ConditionEvaluation.tsx"
 import {EllipsisedText} from "@/components/ui/EllipsisedText.tsx"
 import {LoadingSpinner} from "@/components/ui/LoadingSpinner.tsx"
+import {IBE} from "identity-based-encryption-bn254"
+import { DecryptedMessage } from "./DecryptedMessage"
 
 type SigningAndDecryptionProps = {
     keyshare: KeysharesFile,
 }
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:3000"
+const REFRESH_INTERVAL_MS = 10_000
+const ibe = new IBE()
 
 export const SigningAndDecryption = ({keyshare}: SigningAndDecryptionProps) => {
     const [isLoading, setIsLoading] = useState(true)
@@ -21,14 +25,20 @@ export const SigningAndDecryption = ({keyshare}: SigningAndDecryptionProps) => {
         if (!keyshare) {
             return
         }
-        const partialSignature = signPartial(keyshare.share, keyshare.conditions)
+
+        const identity = ibe.createIdentity(keyshare.conditions)
+        const partialSignature = ibe.createDecryptionKey(IBE.parseSecretKey(keyshare.share.share), identity)
         const requestBody = {
-            partialSignature: partialSignature.toHex(),
+            shareIndex: Number(keyshare.share.index),
+            partialSignature: partialSignature.bytes.toHex(),
             publicKey: createPublicKeyShare(keyshare.share).pk.toHex()
         }
         uploadPartialSignature(SERVER_URL, keyshare.id, requestBody)
             .then(() => setUploadComplete(true))
-            .catch(setIsNetworkError)
+            .catch(err => {
+                console.error(err)
+                setIsNetworkError(true)
+            })
 
     }, [keyshare])
 
@@ -36,9 +46,12 @@ export const SigningAndDecryption = ({keyshare}: SigningAndDecryptionProps) => {
         setIsLoading(true)
         fetchPartials(SERVER_URL, keyshare.id)
             .then(setPartials)
-            // we reset the upload state now the use can see th partials in the table
+            // we reset the upload state now the use can see the partials in the table
             .then(() => setUploadComplete(false))
-            .catch(setIsNetworkError)
+            .catch(err => {
+                console.error(err)
+                setIsNetworkError(true)
+            })
             .finally(() => setIsLoading(false))
     }, [keyshare])
 
@@ -51,7 +64,7 @@ export const SigningAndDecryption = ({keyshare}: SigningAndDecryptionProps) => {
 
     // periodically refresh the partials to check for new one
     useEffect(() => {
-        const id = setInterval(reloadPartialsAction, 5000)
+        const id = setInterval(reloadPartialsAction, REFRESH_INTERVAL_MS)
         return () => clearInterval(id)
     }, [reloadPartialsAction])
 
@@ -67,11 +80,11 @@ export const SigningAndDecryption = ({keyshare}: SigningAndDecryptionProps) => {
                 <SignatureTable
                     partials={partials ?? []}
                 />
-                <DecryptedMessage
-                    partials={partials ?? []}
-                    threshold={keyshare.threshold}
-                />
             </LoadingSpinner>
+            <DecryptedMessage
+                partials={partials ?? []}
+                keyshare={keyshare}
+            />
         </>
     )
 }
@@ -81,29 +94,21 @@ type SignatureTableProps = {
 }
 
 const SignatureTable = ({partials}: SignatureTableProps) =>
-    <div className="grid grid-cols-2">
+    <div className="grid grid-cols-3 text-start p-4">
         <div><strong>Index</strong></div>
-        <div><strong>Public Key</strong></div>
+        <div className="col-span-2"><strong>Public Key</strong></div>
         {!partials || partials.length === 0
-            ? <div className="col-span-2">No partials yet</div>
-            : partials.map((partial: PartialSignature, index: number) =>
+            ? <div className="col-span-3">No partials yet</div>
+            : partials.slice().sort(p => p.shareIndex).map((partial: PartialSignature) =>
                 <>
-                    <div key={`pk${index}`}><strong>{index}</strong></div>
-                    <div key={`sig${index}`}><EllipsisedText text={partial.publicKey}/></div>
+                    <div key={`pk${partial.shareIndex}`}>
+                        <strong>{partial.shareIndex}</strong>
+                    </div>
+                    <div key={`sig${partial.shareIndex}`} className="col-span-2">
+                        <EllipsisedText text={partial.publicKey}/>
+                    </div>
                 </>
             )
         }
     </div>
 
-type DecryptedMessageProps = {
-    partials: Array<PartialSignature>,
-    threshold: number,
-}
-const DecryptedMessage = ({partials, threshold}: DecryptedMessageProps) => {
-    if (!partials || threshold === 0 || partials.length < threshold) {
-        return <div>🔒 Message is still locked</div>
-    }
-    return (
-        <div>Decrypted message: Hello world</div>
-    )
-}

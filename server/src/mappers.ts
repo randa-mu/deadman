@@ -27,6 +27,7 @@ export function parsePartialSignature(ciphertextId: string, json: any): PartialS
     const data = result.data
     return {
         ciphertextId,
+        shareIndex: BigInt(data.shareIndex),
         signature: decodeBytes(data.partialSignature),
         publicKey: decodeBytes(data.publicKey),
     }

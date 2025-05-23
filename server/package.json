@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "hono": "^4.7.7",
+    "identity-based-encryption-bn254": "^0.0.6",
     "shared": "workspace:*",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7",
