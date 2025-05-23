@@ -8,11 +8,12 @@ type DownloadCiphertextsProps = {
     id: string
     ciphertext: Uint8Array,
     conditions: Uint8Array,
+    threshold: number
     shares: Array<SecretKeyShare>
 }
 
 export const DownloadShares = (props: DownloadCiphertextsProps) => {
-    const {id, ciphertext, conditions, shares} = props
+    const {id, ciphertext, conditions, shares, threshold} = props
     return (
         <div className="flex flex-col space-y-4">
             <p>Download each of the keyshares below and send them to a person you trust to report honestly
@@ -27,6 +28,7 @@ export const DownloadShares = (props: DownloadCiphertextsProps) => {
                             ciphertext={ciphertext}
                             conditions={conditions}
                             share={share}
+                            threshold={threshold}
                         >
                             Download share {share.index}
                         </DownloadButton>
@@ -39,14 +41,15 @@ export const DownloadShares = (props: DownloadCiphertextsProps) => {
 
 type DownloadButtonProps = {
     id: string,
+    threshold: number
     ciphertext: Uint8Array,
     conditions: Uint8Array,
     share: SecretKeyShare,
     children: ReactNode | ReactNode[],
 }
 
-function DownloadButton({id, ciphertext, conditions, share, children}: DownloadButtonProps) {
-    const file: KeysharesFile = {id, ciphertext, conditions, share}
+function DownloadButton({id, ciphertext, conditions, share, threshold, children}: DownloadButtonProps) {
+    const file: KeysharesFile = {id, ciphertext, conditions, share, threshold }
     const fileJson = encodeKeysharesFile(file)
     return <Button onClick={() => downloadFile(fileJson, `share-${share.index}.json`)}>{children}</Button>
 }

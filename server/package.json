@@ -5,11 +5,15 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "dev": "bun run --hot src/index.ts"
+    "dev": "bun run --hot src/index.ts",
+    "start": "bun dist/index.js"
   },
   "dependencies": {
     "hono": "^4.7.7",
+    "identity-based-encryption-bn254": "^0.0.6",
     "shared": "workspace:*",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
