@@ -1,7 +1,6 @@
 import {Hono} from "hono"
 import {cors} from "hono/cors"
 import {ZodError} from "zod"
-import {verifyPartial} from "shamir-secret-sharing-bn254"
 import {DeadmanDatabase} from "@server/db"
 import {parseCiphertext, parsePartialSignature} from "@server/mappers"
 import {IBE} from "identity-based-encryption-bn254"

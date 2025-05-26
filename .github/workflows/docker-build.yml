@@ -66,6 +66,8 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: ${{ github.ref == 'refs/heads/master' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           cache-from: |
             type=registry,ref=${{ env.DOCKER_REGISTRY }}/deadman-api-cache:${{ steps.meta.outputs.version }}
             type=registry,ref=${{ env.DOCKER_REGISTRY }}/deadman-api-cache:master-latest
