@@ -30,12 +30,11 @@ export const DecryptionPage = () => {
     return (
         <div className="m-4 space-y-4">
             <FilePicker
-                label={"Choose a keyshares file to upload"}
+                label={"Choose a keyshare file to upload"}
                 file={file}
                 onFileChange={setFile}
             />
             {isError && <p className="font-destructive">Invalid keyshare file</p>}
-
             {!!keyshare && <SigningAndDecryption keyshare={keyshare}/>}
         </div>
     )
