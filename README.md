@@ -30,7 +30,9 @@ The server application can be built and run by running `docker build .` at the p
 - [x] web form for partial signing
 - [x] API for storage of partial signatures, and automatic aggregation
 - [x] persistent database for web API
-- [ ] actual encryption of ciphertexts
-- [ ] link the user and ciphertext to avoid cross-decryption
+- [x] actual encryption of ciphertexts
+- [x] link the user and ciphertext to avoid cross-decryption
+- [ ] hybrid encryption for larger ciphertexts
+- [ ] configurable conditions
 - [ ] enable storage and retrieval of ciphertexts to/from IPFS
 - [ ] enable storage and retrieval of ciphertexts and conditions to/from a blockchain
