@@ -7,6 +7,7 @@ export class DeadmanDatabase {
     db: Database
 
     constructor(filename = DB_FILE) {
+        console.log(`loading database at ${filename}`)
         const db = new Database(filename, {create: true, safeIntegers: true})
         db.exec("PRAGMA foreign_keys = ON ")
         db.exec(`
