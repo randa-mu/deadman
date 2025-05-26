@@ -6,6 +6,7 @@ import {HomePage} from "@/pages/HomePage.tsx"
 import {BackButtonMixin} from "@/views/BackButtonMixin.tsx"
 import {Button} from "@/components/ui/button.tsx"
 import RandamuLogo from "@/assets/randamu_logo.svg"
+import GithubLogo from "@/assets/github.svg"
 
 export const App = () => {
     return (
@@ -20,6 +21,11 @@ export const App = () => {
                     <Route path="*" Component={BackButtonMixin(NotFoundPage)}/>
                 </Routes>
             </div>
+            <a href="https://github.com/randa-mu/deadman">
+                <div className="absolute bottom-0 left-0 flex flex-row items-center p-6">
+                    <img className="h-10 w-10" src={GithubLogo} alt={"github logo"}/>
+                </div>
+            </a>
             <a href="https://randa.mu">
                 <div className="absolute bottom-0 right-0 flex flex-row items-center p-4">
                     <Button variant="ghost" className="p-6">
