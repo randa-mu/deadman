@@ -8,7 +8,7 @@ import {Input} from "@/components/ui/input.tsx"
 import {Button} from "@/components/ui/button.tsx"
 
 type CreateSharesProps = {
-    onNewShares: (publicKey: PublicKey, shares: Array<SecretKeyShare>) => void
+    onNewShares: (publicKey: PublicKey, shares: Array<SecretKeyShare>, threshold: number) => void
 }
 
 const createSharesSchema = z.object({
@@ -17,6 +17,7 @@ const createSharesSchema = z.object({
 })
 
 export function CreateShares(props: CreateSharesProps) {
+    const { onNewShares } = props
     const form = useForm<z.infer<typeof createSharesSchema>>({
         resolver: zodResolver(createSharesSchema),
         defaultValues: {
@@ -30,9 +31,9 @@ export function CreateShares(props: CreateSharesProps) {
         const pk = createPublicKey(sk)
         const shares = split(sk, data.count, data.threshold)
 
-        props.onNewShares(pk, shares)
+        onNewShares(pk, shares, data.threshold)
 
-    }, [props.onNewShares])
+    }, [onNewShares])
 
     return (
         <div className="space-y-4">
