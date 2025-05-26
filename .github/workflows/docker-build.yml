@@ -1,11 +1,10 @@
-name: build
+name: docker-build
 on:
   pull_request:
   push:
     branches: [ master ]
     tags:
       - .*
-
 
 env:
   SERVICE_ACCOUNT: github@randamu-prod.iam.gserviceaccount.com
