@@ -2,7 +2,7 @@
   "compilerOptions": {
     // environment setup & latest features
     "lib": ["esnext", "dom", "dom.iterable"],
-    "target": "bun",
+    "target": "esnext",
     "module": "esnext",
     "moduleDetection": "force",
     "jsx": "react-jsx",
