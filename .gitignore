@@ -42,3 +42,4 @@ bun.lockb
 
 # state from running `bun dev`
 server/state.sqlite
+state.sqlite

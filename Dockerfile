@@ -11,22 +11,15 @@ RUN bun install --frozen-lockfile --ignore-scripts
 FROM deps AS build
 WORKDIR /usr/src/app
 COPY . .
-RUN bun run build
+ENV NODE_ENV=production
+RUN bun build ./server/src/index.ts --compile --outfile deadman-api
 
 # 3) Final image: pull in only what server needs
-FROM oven/bun:latest AS release
-WORKDIR /usr/src/app
-
-# pull in installed modules (all workspaces)
-COPY --from=deps /usr/src/app/node_modules ./node_modules
-
+FROM debian:bookworm-slim AS release
 # copy server code + any shared code it imports
-COPY --from=build /usr/src/app/server ./server
-COPY --from=build /usr/src/app/shared ./shared
+COPY --from=build /usr/src/app/deadman-api /usr/bin/deadman-api
 
-WORKDIR /usr/src/app/server
-ENV NODE_ENV=production
 EXPOSE 3000
 
 # use the server’s start script—adjust if yours is different
-CMD ["bun", "run", "start"]
+CMD ["/usr/bin/deadman-api"]

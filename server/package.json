@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "bun run --hot src/index.ts",
-    "start": "bun dist/index.js"
+    "start": "bun dist/server/src/index.js"
   },
   "dependencies": {
     "hono": "^4.7.7",
