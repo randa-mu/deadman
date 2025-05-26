@@ -21,12 +21,12 @@ export const App = () => {
                     <Route path="*" Component={BackButtonMixin(NotFoundPage)}/>
                 </Routes>
             </div>
-            <a href="https://github.com/randa-mu/deadman">
+            <a href="https://github.com/randa-mu/deadman" target="_blank">
                 <div className="absolute bottom-0 left-0 flex flex-row items-center p-6">
                     <img className="h-10 w-10" src={GithubLogo} alt={"github logo"}/>
                 </div>
             </a>
-            <a href="https://randa.mu">
+            <a href="https://randa.mu" target="_blank">
                 <div className="absolute bottom-0 right-0 flex flex-row items-center p-4">
                     <Button variant="ghost" className="p-6">
                         Built for your privacy<img className="h-10 w-10" src={RandamuLogo} alt={"randamu logo"}/>
