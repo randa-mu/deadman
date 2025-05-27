@@ -39,12 +39,18 @@ export const DecryptedMessage = ({partials, keyshare}: DecryptedMessageProps) =>
 
     }, [partials, keyshare])
 
+    const sigsRemaining = keyshare.threshold - (partials?.length ?? 0)
+
     if (errorMessage) {
         return <div className="text-destructive">{errorMessage}</div>
     }
 
     if (!plaintext) {
-        return <div>🔒 Message is still locked</div>
+        return (
+            <div>
+                <p>🔒 Message is still locked - <strong>{sigsRemaining}</strong> partial signatures remaining</p>
+            </div>
+        )
     }
 
     return (
